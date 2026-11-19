@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 public class AiService {
 
     private final ChatClient chatClient;
+    private final ProductTools productTools;
 
-    public AiService(ChatClient.Builder builder) {
+    public AiService(ChatClient.Builder builder, ProductTools productTools) {
         this.chatClient = builder.build();
+        this.productTools = productTools;
     }
 
     public String ask(String question) {
@@ -90,5 +92,17 @@ public class AiService {
                 .user("Extract the person's information: " + text)
                 .call()
                 .entity(Person.class);
+    }
+
+
+
+    // Tool
+    public String askViaTool(String question) {
+//        LLM decides → Spring AI executes → Java method works → LLM formulates the answer
+        return chatClient.prompt()
+                .user(question)
+                .tools(productTools)
+                .call()
+                .content();
     }
 }

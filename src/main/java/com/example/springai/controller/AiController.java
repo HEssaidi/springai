@@ -25,4 +25,10 @@ public class AiController {
         AiService.Person ask = aiService.extractInfos(infos);
         return ask;
     }
+
+    @GetMapping("/askViaTool")
+    public String askViaTool(@RequestParam String question) {
+        String ask = aiService.askViaTool(question);
+        return ask;
+    }
 }
